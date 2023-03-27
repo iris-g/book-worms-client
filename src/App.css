@@ -12,7 +12,49 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+input[type=email], input[type=password] {
+  padding: 6px;
+  margin-bottom: 6px;
+}
+.input-group .form-control {
+  padding-left: 10px; /* adjust the value to add more or less space */
+}
 
+.input-error {
+  border: 1px solid red;
+  color: red;
+}
+.rowC{display:flex; flex-direction:row;}
+.input-group-text {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: none;
+}
+.input-group {
+ 
+  margin-left: 10px;
+}
+  
+
+.image-container{
+  margin-right: 550px;
+
+}
+.form-left {
+
+  margin-left: 150px;
+}
+.form-control {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #80bdff;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

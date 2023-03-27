@@ -29,7 +29,6 @@ function Dashboard() {
         </div>
       }
     />
-  </div>);
-}
+  </div>);}
 
 export default Dashboard;  // <-- Make sure to export the component

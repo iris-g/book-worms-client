@@ -3,11 +3,16 @@ import { Link } from 'react-router-dom';
 import "../styles/styles.css"
 import logo from '../logo1.png';
 import { useNavigate  } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
+import { FaUser, FaLock } from 'react-icons/fa';
 function Home() {
   const navigate  = useNavigate ();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [hasError, setError] = useState('');
+
   async function checkLoginData() {
     try {
       const res = await fetch('http://localhost:5000/login', {
@@ -25,62 +30,59 @@ function Home() {
   async function handleLogin(event) {
     event.preventDefault();
     const result = await checkLoginData();
+    console.log(result)
     if (result.status === 'success') {
       navigate('/dashboard');
     } else {
-      setError(result.message);
+      setError(result.status);
+
     }
   }
+  //Join our social network for book lovers and let AI do the heavy lifting. Discover your new favorite book based on your interests and connect with others who share your passion.
   return (
+    
 <div className="container">
-      <div className="col">
-        <div className="col-md-6 ">
-          <h1>Welcome to Book worms!</h1>
-          <text>Sign up or log in to get started.</text>
-          <img src={logo} alt="" className="sized-image" />
-        </div>
-        <div className="col-md-6 ">
-          <div className="card">
-            <div className="card-header">
-              <h5>Sign In</h5>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleLogin}>
-                <div className="form-group">
-                  <label>Email address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="exampleInputPassword1"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              </form>
-              {error && <div className="alert alert-danger mt-3">{error}</div>}
-              <hr />
-              <Link to="/signup">Don't have an account? Sign up now!</Link>
-            </div>
+  <div className="rowC">
+    <div className="col-md-10">
+      <div class="form-left">
+        <div className="card">
+          <div className="card-header">
+            <h1>Welcome to Book worms!</h1>
           </div>
+        <form> 
+          <h4>Join our social network for book lovers and let AI do the heavy lifting. Discover your new favorite book based on your interests and connect with others who share your passion.</h4>
+          <h5>Sign up or log in to get started.</h5>
+          <div className="input-group">
+            <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i><FaUser /></span>
+            <input id="email" type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} name="email" placeholder="Email" />
+          </div>
+          <div className="input-group">
+            <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i> <FaLock /></span>
+            <input id="password" type="password" className={hasError ? 'input-error' : "form-control"} onChange={(e) => setPassword(e.target.value)} name="password" placeholder="Password" />
+          </div>
+          <div className="input-group">
+          </div>
+        </form>
+        
+        <div className="card-body">
+          <form onSubmit={handleLogin}>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+          {hasError && <div className="alert alert-danger mt-3">{hasError}</div>}
+          <Link to="/signup">Don't have an account? Sign up now!</Link>
+        </div>
         </div>
       </div>
     </div>
+    <div className="col-md-6">
+      <img src={logo} alt="" className="image-container" style={{ maxWidth: '45%' }}/>
+    </div>
+  </div>
+</div>
+
+
 
 
 
