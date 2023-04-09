@@ -1,34 +1,82 @@
-import React, { useState } from 'react';
-import Autocomplete from 'react-autocomplete';
-function Dashboard() {
+import React, { useState } from "react";
+import Autocomplete from "react-autocomplete";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+} from "@material-ui/core";
 
-  const [value, setValue] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+const useStyles = makeStyles({
+  searchQuery: {
+    marginLeft: 26,
+  },
+  topScreen:{
+    marginTop:26,
+  }
+});
+function Dashboard() {
+  const [options, setOptions] = useState([]);
+  const [searchType, setSearchType] = useState("ISBN");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchTypeChange = (event) => {
+    setSearchType(event.target.value);
+  };
+
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    // Perform search using searchType and searchQuery
+  };
+
+  const classes = useStyles();
+
   const handleSearch = (event) => {
-   fetch('https://openlibrary.org/api/books?bibkeys=ISBN:0451526538&jscmd=data&format=json')
-  .then(response => response.json())
-  .then(data => {
-    // Do something with the data
-    console.log(data)
-  });
+    const searchQuery = event.target.value;
+    if (searchQuery.length > 2) {
+      fetch(`https://openlibrary.org/search.json?author=${searchQuery}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const bookOptions = data.docs.map((book) => ({
+            title: book.title,
+            author: book.author_name ? book.author_name[0] : "Unknown",
+            isbn: book.isbn ? book.isbn[0] : "Unknown",
+          }));
+          setOptions(bookOptions);
+        });
+    }
   };
 
   return (
-    <div className="container">
-    <Autocomplete
-      value={value}
-      onChange={event => {
-    setValue(event.target.value);
-    handleSearch(event);}}
-      onSelect={value => setValue(value)}
-      items={suggestions}
-      getItemValue={item => item.title} // Change this depending on your data structure
-      renderItem={(item, isHighlighted) =>
-        <div key={item.id} style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-          {item.title} 
-        </div>
-      }
-    />
-  </div>);}
+    <div class="App">
+      <form onSubmit={handleSearchSubmit}>
+        <FormControl>
+          <InputLabel>Search by</InputLabel>
+          <Select value={searchType} onChange={handleSearchTypeChange}>
+            <MenuItem value="ISBN">ISBN</MenuItem>
+            <MenuItem value="Book Name">Book Name</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          type="text"
+          value={searchQuery}
+          className={classes.searchQuery}
+          onChange={handleSearchQueryChange}
+          placeholder="Enter search query"
+        />
+        <Button type="submit" variant="contained" color="primary"  className={classes.searchQuery}>
+          Search
+        </Button>
+      </form>
+    </div>
+  );
+}
 
-export default Dashboard;  // <-- Make sure to export the component
+export default Dashboard; // <-- Make sure to export the component
